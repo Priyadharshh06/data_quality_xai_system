@@ -98,7 +98,6 @@ Cleaned Dataset Output + Quality Score
 
 ## 🖥️ Dashboard Screenshots
 
-## 🖥️ Dashboard Screenshots
 
 ![Dashboard Overview](Screenshots/Dashboard%20Overview.png)
 ![Data Overview](Screenshots/Data%20Overview.png)
@@ -150,7 +149,7 @@ http://localhost:8501
 
 ## 👩‍💻 Author
 
-**Priya Dharshini**
+**Priya Dharshini V**
 M.Sc. Information Technology - VISTAS, Chennai
 Supervised by: Dr. A. Akila
 
