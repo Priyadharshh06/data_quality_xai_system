@@ -98,17 +98,14 @@ Cleaned Dataset Output + Quality Score
 
 ## 🖥️ Dashboard Screenshots
 
-> **Upload your Streamlit dashboard screenshots here.**
->
-> To add screenshots:
-> 1. Take a screenshot of your running Streamlit app
-> 2. Save them in a folder called `screenshots/` in this repo
-> 3. Replace the lines below with your actual image paths
 
 ```
-screenshots/dashboard_overview.png
-screenshots/shap_summary.png
-screenshots/anomaly_table.png
+Screenshots/Dashboard Overview.png
+Screenshots/Data Overview.png
+Screenshots/Noise and Data Quality Report.png
+Screenshots/Model Comparison
+Screenshots/Evaluation Metrics
+Screenshots/Anomaly Dis per Feature
 ```
 
 *(Replace this section with your actual screenshots after uploading them to the repo)*
