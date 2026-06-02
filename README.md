@@ -99,15 +99,6 @@ Cleaned Dataset Output + Quality Score
 ## 🖥️ Dashboard Screenshots
 
 
-```
-Screenshots/Dashboard Overview.png
-Screenshots/Data Overview.png
-Screenshots/Noise and Data Quality Report.png
-Screenshots/Model Comparison
-Screenshots/Evaluation Metrics
-Screenshots/Anomaly Dis per Feature
-```
-
 *(Replace this section with your actual screenshots after uploading them to the repo)*
 
 ---
@@ -154,7 +145,7 @@ http://localhost:8501
 ## 👩‍💻 Author
 
 **Priya Dharshini**
-M.Sc. Information Technology — VISTAS, Chennai
+M.Sc. Information Technology - VISTAS, Chennai
 Supervised by: Dr. A. Akila
 
 [![GitHub](https://img.shields.io/badge/GitHub-Priyadharshh06-black?logo=github)](https://github.com/Priyadharshh06)
