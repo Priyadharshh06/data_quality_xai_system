@@ -98,8 +98,14 @@ Cleaned Dataset Output + Quality Score
 
 ## 🖥️ Dashboard Screenshots
 
+## 🖥️ Dashboard Screenshots
 
-*(Replace this section with your actual screenshots after uploading them to the repo)*
+![Dashboard Overview](Screenshots/Dashboard%20Overview.png)
+![Data Overview](Screenshots/Data%20Overview.png)
+![Noise and Data Quality Report](Screenshots/Noise%20and%20Data%20Quality%20Report.png)
+![Model Comparison](Screenshots/Model%20Comparison.png)
+![Evaluation Metrics](Screenshots/Evaluation%20Metrics.png)
+![Anomaly Distribution per Feature](Screenshots/Anomaly%20Dis%20per%20Feature.png)
 
 ---
 
