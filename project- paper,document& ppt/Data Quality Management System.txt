@@ -1,0 +1,14 @@
+TITLE OF PROJECT
+Explainable AI-Based Automated Data Quality Management System for Noise Detection in Numerical Data Pipelines
+
+OBJECTIVE OF PROJECT
+To automatically detect noisy and anomalous data points in numerical datasets using three machine learning algorithms — Isolation Forest, Local Outlier Factor, and One-Class SVM — and to explain the reason behind each detection using SHAP (SHapley Additive exPlanations), deployed as an interactive web application.
+
+ABSTRACT OF PROJECT
+Real-world data pipelines often contain noisy, erroneous, or anomalous data points that can corrupt downstream analysis and machine learning models. This project presents an automated data quality management system that detects such noise using three unsupervised machine learning algorithms. A consensus voting mechanism combines the results of all three models for more reliable detection. SHAP is then used to explain why each data point was flagged, making the system transparent and trustworthy. The entire pipeline is deployed as a Streamlit web application where users can upload any numerical CSV dataset and instantly receive detection results, visual comparisons, and feature-level explanations.
+
+AREA OF INNOVATION
+Artificial Intelligence, Explainable AI (XAI), Data Engineering, Data Quality Management, Machine Learning
+
+METHODOLOGY
+The system follows a six stage modular pipeline. Raw data is first ingested from a CSV file and stored in a SQLite database. It is then preprocessed by handling missing values, removing duplicates, and applying StandardScaler normalisation. Three unsupervised anomaly detection models — Isolation Forest, Local Outlier Factor, and One-Class SVM — are applied on the cleaned data. Their results are combined using a 2 out of 3 consensus voting mechanism to produce the final anomaly labels. SHAP TreeExplainer is then used to generate feature contribution explanations including Summary, Dot, Waterfall, and Force plots. The complete pipeline is presented through an interactive Streamlit web application.

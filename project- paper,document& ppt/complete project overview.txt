@@ -1,0 +1,326 @@
+Hello Priya! Here is a simple overview of your project:
+
+---
+
+## 🔍 Explainable AI-Based Data Quality Management System
+
+### What It Does
+Your system automatically finds **noisy/bad data points** in any numerical dataset and explains **why** each point was flagged — then gives you a clean version of the data.
+
+---
+
+### How It Works — Step by Step
+
+**1. Upload** — User uploads any numerical CSV file
+
+**2. Preprocess** — Missing values filled, duplicates removed, data scaled
+
+**3. Detect** — Three ML models analyse the data independently:
+- 🌲 Isolation Forest
+- 🔍 Local Outlier Factor
+- 🤖 One-Class SVM
+
+**4. Consensus** — A point is confirmed as noisy only if **2 out of 3 models agree**
+
+**5. Results** — User immediately gets:
+- 📊 Data Quality Score (overall % cleanliness)
+- ✅ Cleaned dataset download
+- 🚨 Anomaly report with reasons (powered by SHAP)
+
+**6. Deep Analysis** — For technical users, expandable section shows:
+- Model comparison charts
+- Precision, Recall, F1 metrics
+- SHAP explanations for all 3 models
+
+---
+
+### Key Strengths
+- Works with **any numerical CSV** — not just one fixed dataset
+- **Auto-suggests** contamination rate — no domain knowledge needed
+- **Explains every anomaly** using SHAP — not just detects
+- **Modular architecture** — 7 connected Python files
+
+---
+
+### Tech Stack
+Python, Streamlit, Scikit-learn, SHAP, SQLite, Pandas
+
+---
+
+Want me to go deeper into any specific part?
+
+
+
+Great question! This is essentially writing a **system prompt** or **context brief** for another AI. Here is what you should tell it:
+
+---
+
+## 📋 Project Brief for Another AI
+
+**Project Name:** Explainable AI-Based Data Quality Management System
+
+**Type:** MSc Final Year Project — Python/Streamlit web application
+
+**Core Idea:** Detect noisy/anomalous data points in any numerical CSV dataset using three unsupervised ML models, explain why each point was flagged using SHAP, and deliver two outputs — a cleaned dataset and an anomaly report with reasons.
+
+---
+
+**Tech Stack:**
+Python, Streamlit, Scikit-learn, SHAP, SQLite, Pandas, Seaborn, Matplotlib
+
+---
+
+**File Structure:**
+- `app.py` — Main Streamlit UI, imports from all other modules
+- `data_ingestion.py` — Loads any CSV file, accepts command line argument
+- `data_storage.py` — Saves data to SQLite, table name derived from filename
+- `data_preprocessing.py` — Fills missing values, removes duplicates, StandardScaler
+- `noise_detection.py` — Runs Isolation Forest, LOF, One-Class SVM, returns consensus
+- `model_comparison.py` — Comparison charts and agreement heatmap
+- `shap_explainability.py` — SHAP for all 3 models, TreeExplainer for IF, KernelExplainer for LOF and SVM
+- `.streamlit/config.toml` — Light theme configuration
+
+---
+
+**Key Design Decisions:**
+- Consensus voting — a point is flagged as anomaly only if 2 out of 3 models agree
+- Consensus is used as ground truth for evaluation metrics (Precision, Recall, F1)
+- Contamination rate is auto-suggested using IQR method, user can override
+- SHAP sample uses balanced mix of anomalies and normal points
+- SHAP reasons are computed for ALL anomaly points and included in the anomaly report
+- SVM is trained on a sample (max 10,000 rows) for performance
+- All modules have standalone `run_` functions that accept parameters to avoid duplicate pipeline execution
+
+---
+
+**App Flow:**
+1. Upload CSV → 2. Select numerical columns → 3. Preprocess → 4. Detect anomalies → 5. Show quality score + download outputs → 6. Detailed technical analysis in expander (model comparison, metrics, distribution plots, SHAP for all 3 models)
+
+---
+
+**Output Files:**
+- `cleaned_dataset.csv` — original scale values, anomalies removed
+- `anomaly_report.csv` — original scale values + `flagged_by` column (which models) + `reason` column (all SHAP features ranked by importance with direction and score)
+
+---
+
+**Data Quality Score Formula:**
+- Noise-Free score × 50% + Completeness score × 25% + Uniqueness score × 25%
+- Green ≥ 90%, Amber 70–90%, Red < 70%
+
+---
+
+**UI:**
+- Light background (`#F8FAFC`), steel blue sidebar (`#2D4A6B`)
+- Streamlit light theme via `config.toml`
+- All section headers use inline HTML for guaranteed font sizes
+- SHAP sample size hidden in Advanced Settings expander
+
+---
+
+**Still Pending:**
+- `requirements.txt`
+- `README.md`
+
+---
+
+You can copy-paste this entire brief to any AI and it will have a complete understanding of your project to help you further. Want me to save this somewhere or format it differently?
+
+
+
+Here is the detailed version:
+
+---
+
+## 📋 Complete Project Brief — Explainable AI-Based Data Quality Management System
+
+---
+
+### Project Overview
+This is an MSc Final Year Project built as a Python/Streamlit web application. The core idea is to detect noisy or anomalous data points in any numerical CSV dataset using three unsupervised machine learning models, explain why each point was flagged using SHAP (SHapley Additive exPlanations), and deliver two downloadable outputs — a cleaned dataset and an anomaly report with reasons. The project serves three simultaneous goals: viva/exam presentation, research paper publication, and job portfolio strength.
+
+---
+
+### Tech Stack
+Python, Streamlit, Scikit-learn (IsolationForest, LocalOutlierFactor, OneClassSVM, StandardScaler, precision_score, recall_score, f1_score), SHAP (TreeExplainer, KernelExplainer), SQLite, Pandas, NumPy, Matplotlib, Seaborn
+
+---
+
+### File Structure
+```
+project/
+├── app.py
+├── data_ingestion.py
+├── data_storage.py
+├── data_preprocessing.py
+├── noise_detection.py
+├── model_comparison.py
+├── shap_explainability.py
+└── .streamlit/
+    └── config.toml
+```
+
+---
+
+### Module-by-Module Explanation
+
+---
+
+#### `data_ingestion.py` — Module 1
+**Purpose:** Load any CSV file into a pandas DataFrame.
+
+**Key function:** `load_data(filepath)` — reads CSV, returns DataFrame. `run_ingestion(filepath=None)` — standalone entry point. Accepts filepath as a function argument OR as a command line argument (`python data_ingestion.py myfile.csv`). Falls back to default IoT dataset if nothing is passed. Returns `(df, filepath)` tuple so the filepath is passed downstream.
+
+**Key design decision:** Returns filepath alongside the DataFrame so `data_storage.py` can derive the table name from it.
+
+---
+
+#### `data_storage.py` — Module 2
+**Purpose:** Store the loaded DataFrame into a SQLite database.
+
+**Key functions:**
+- `get_table_name(filepath)` — derives a safe SQLite table name from the CSV filename. Example: `iot_telemetry_data.csv` → table `iot_telemetry_data`. Replaces any non-alphanumeric characters with underscores.
+- `create_table(conn, df, table_name)` — dynamically builds CREATE TABLE SQL based on actual DataFrame columns and their dtypes. Maps pandas dtypes to SQLite types (INTEGER, REAL, TEXT). Drops and recreates table on each run.
+- `store_data(conn, df, table_name)` — converts any boolean columns to integers (SQLite has no boolean type), then stores using `df.to_sql()`.
+- `run_storage(filepath=None)` — standalone entry point. Calls `run_ingestion()` internally, then stores to database. Returns `(conn, df, table_name)`.
+
+**Key design decision:** Table name is dynamic — not hardcoded to `raw_sensor_data`. Works with any dataset.
+
+---
+
+#### `data_preprocessing.py` — Module 3
+**Purpose:** Clean and scale the numerical data for ML model input.
+
+**Key functions:**
+- `preprocess_dataframe(df, selected_cols)` — the main reusable function used by `app.py`. Accepts any DataFrame and any list of column names. Steps: (1) select columns, (2) fill missing values with column mean, (3) drop duplicates, (4) apply StandardScaler. Returns `(df_scaled, scaler, df_numerical)`. `df_numerical` holds original scale values before scaling, `df_scaled` holds scaled values for model input.
+- `run_preprocessing(table_name=None)` — standalone entry point. Loads from SQLite database, auto-detects numerical columns, calls `preprocess_dataframe()`. Accepts table name as argument or command line input.
+
+**Key design decision:** `preprocess_dataframe()` is completely decoupled from the database — it works on any DataFrame passed to it. This is what allows `app.py` to use it with uploaded files directly.
+
+---
+
+#### `noise_detection.py` — Module 4
+**Purpose:** Run three anomaly detection models and combine results using consensus voting.
+
+**Key functions:**
+- `run_isolation_forest(df_scaled, contamination)` — fits IsolationForest with `n_estimators=100`, `random_state=42`. Returns binary labels (1=anomaly, 0=normal) and fitted model.
+- `run_lof(df_scaled, contamination)` — fits LocalOutlierFactor with `n_neighbors=20`. Returns labels and fitted model.
+- `run_one_class_svm(df_scaled, contamination)` — fits OneClassSVM with `kernel='rbf'`. Trains on `min(10000, len(df_scaled))` rows for performance, predicts on full dataset. Returns labels and fitted model.
+- `combine_results(df_numerical, if_labels, lof_labels, svm_labels)` — merges all three label sets into one DataFrame. Adds `anomaly_consensus` column: 1 if sum of three labels ≥ 2 (2 out of 3 models agree), else 0.
+- `detect_anomalies(df_scaled, df_numerical, contamination)` — main reusable function used by `app.py`. Calls all three model functions, combines results, returns `(df_results, model_if, model_lof, model_svm)`.
+- `run_noise_detection()` — standalone entry point, calls `run_preprocessing()` then `detect_anomalies()`.
+
+**Key design decisions:**
+- SVM sample size is capped with `min()` to prevent crash on small datasets.
+- Consensus threshold is 2 out of 3 — not unanimous — to balance sensitivity and specificity.
+- `detect_anomalies()` accepts pre-processed data so pipeline does not re-run when called from other modules.
+
+---
+
+#### `model_comparison.py` — Module 5
+**Purpose:** Generate comparison charts between the three models.
+
+**Key functions:**
+- `compare_anomaly_counts(df_results)` — builds a summary DataFrame with anomaly counts and percentages per model.
+- `plot_anomaly_counts(comparison_df)` — bar chart comparing anomaly counts across all 4 (3 models + consensus). Saves to `outputs/` folder.
+- `plot_agreement_matrix(df_results)` — correlation heatmap showing how much each pair of models agree on their predictions.
+- `plot_anomaly_distribution(df_results)` — histogram per feature showing normal vs anomaly distribution. Dynamically uses whatever columns exist in `df_results` — not hardcoded.
+- `run_model_comparison(df_results=None, ...)` — accepts `df_results` as optional parameter. If passed, skips pipeline re-run. If not passed (standalone), runs full pipeline first.
+
+**Key design decision:** `run_model_comparison()` accepts parameters to avoid duplicate pipeline execution when called alongside `shap_explainability.py`.
+
+---
+
+#### `shap_explainability.py` — Module 6
+**Purpose:** Compute and visualise SHAP explanations for anomaly predictions.
+
+**Key functions:**
+- `get_shap_sample(df_scaled, df_results, shap_sample_size)` — creates a balanced sample of anomaly and normal points for SHAP computation. Samples `shap_sample_size // 2` from each class. Resets index to avoid alignment issues. Returns `(df_sample, res_sample)`.
+- `compute_shap_values(model_if, df_sample)` — uses `shap.TreeExplainer` on Isolation Forest. Returns `(explainer, shap_values)`.
+- `get_shap_force_html(explainer, df_sample, res_sample)` — generates SHAP force plot HTML in memory using `io.StringIO` buffer. No disk write needed.
+- `plot_shap_force_matplotlib(explainer, df_sample, res_sample)` — generates force plot as matplotlib figure using `shap.force_plot(..., matplotlib=True)`. Captures figure with `plt.gcf()` after SHAP draws.
+- `plot_shap_summary/dot/waterfall` — generates respective SHAP plots and saves to `outputs/` folder.
+- `run_shap_explainability(df_results=None, model_if=None, ...)` — accepts parameters to avoid duplicate pipeline execution.
+
+**Key design decision:** KernelExplainer is used for LOF and SVM inside `app.py` directly (not in this module) because it requires the fitted model objects at runtime. LOF uses `kneighbors` distance as a proxy scoring function. SVM uses `decision_function`. Both wrappers convert numpy arrays to DataFrames before passing to the model to avoid feature name warnings.
+
+---
+
+#### `app.py` — Main Application
+**Purpose:** Streamlit UI that orchestrates the entire pipeline by importing and calling functions from all other modules.
+
+**Imports from modules:**
+- `preprocess_dataframe` from `data_preprocessing`
+- `detect_anomalies` from `noise_detection`
+- `get_shap_sample`, `compute_shap_values` from `shap_explainability`
+
+**Sidebar:**
+- File uploader for any CSV
+- Auto-suggested contamination rate using IQR method — calculates what % of rows fall outside 1.5×IQR for each column, averages across columns, clamps between 0.01 and 0.20
+- Slider pre-filled with suggested rate, user can override
+- SHAP sample size hidden inside Advanced Settings expander
+- How to Use guide with 4 steps
+- About section listing algorithms and explainability methods
+
+**App flow:**
+1. **Step 1** — Data overview: row count, column count, missing values, preview table
+2. **Step 2** — Column selection: auto-detects numerical columns, multiselect widget
+3. **Step 3** — Preprocessing: calls `preprocess_dataframe()`, shows stats
+4. **Step 4** — Noise detection: calls `detect_anomalies()`, shows 4 metric cards (one per model + consensus)
+5. **Step 5** — Data Quality Report and Downloads:
+   - Computes data quality score: `noise_score × 0.5 + completeness_score × 0.25 + uniqueness_score × 0.25`
+   - Colour coded: green ≥ 90%, amber 70–90%, red < 70%
+   - Computes SHAP reasons for ALL anomaly points using TreeExplainer on IF
+   - `build_reason()` — zips feature names with SHAP values, sorts by absolute value descending, builds string like `"High co (SHAP: 2.17) | Low smoke (SHAP: 1.81)"`
+   - `build_flagged_by()` — checks which of the 3 models flagged each row, returns comma-separated model names
+   - Output 1: cleaned dataset (normal rows only, original scale)
+   - Output 2: anomaly report (original scale + flagged_by + reason columns)
+   - Both downloadable as CSV
+6. **Step 6** — Detailed Technical Analysis (inside `st.expander`, collapsed by default):
+   - Model comparison bar chart and agreement heatmap
+   - Evaluation metrics table: Precision, Recall, F1 per model using consensus as ground truth
+   - Best model highlighted
+   - Anomaly distribution histograms per feature
+   - SHAP for Isolation Forest (TreeExplainer) — Summary Bar + Beeswarm + Waterfall
+   - SHAP for LOF (KernelExplainer) — Summary Bar + Beeswarm + Waterfall
+   - SHAP for One-Class SVM (KernelExplainer) — Summary Bar + Beeswarm + Waterfall
+   - Each wrapped in try/except so failure of one does not crash the app
+
+**UI details:**
+- Light background `#F8FAFC`, steel blue sidebar `#2D4A6B`
+- `:root { font-size: 17px }` for global text size boost
+- All section headers use inline HTML `<h2>` and `<h3>` tags for guaranteed font sizes
+- Warning suppression: `warnings.filterwarnings("ignore")`, logging set to ERROR for shap and sklearn
+
+---
+
+#### `.streamlit/config.toml`
+```toml
+[theme]
+base = "light"
+primaryColor = "#3B82F6"
+backgroundColor = "#F8FAFC"
+secondaryBackgroundColor = "#EFF6FF"
+textColor = "#1E293B"
+font = "sans serif"
+```
+
+---
+
+### Key Design Decisions Summary
+- **Consensus voting** — 2 of 3 models must agree for a point to be flagged. Reduces false positives.
+- **Consensus as ground truth** — Used for Precision/Recall/F1 evaluation. Valid approach for unsupervised systems with no pre-labeled data.
+- **Auto contamination rate** — IQR-based suggestion removes need for domain knowledge.
+- **Modular architecture** — Each module has a reusable function (used by app.py) and a standalone `run_` function (used when running the file directly). Avoids duplicate pipeline execution.
+- **SHAP reasons in output** — Every anomaly in the report has a human-readable reason string ranked by feature importance.
+- **Outputs shown first** — Non-technical users get cleaned data immediately. Technical analysis is hidden in an expander.
+
+---
+
+### Still Pending
+- `requirements.txt`
+- `README.md`
+
+---
+
+This is comprehensive enough for any AI to fully understand your project and help you with any part of it. You can copy-paste this as a starting message!
